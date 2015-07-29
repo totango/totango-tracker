@@ -1,0 +1,17 @@
+{
+  "name": "totango-tracker",
+  "version": "1.0.0",
+  "description": "Node JS Totango activities, modules and attributes tracker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "sahar@totango.com",
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.60.0",
+    "url": "^0.10.3",
+    "querystring": "^0.2.0",
+    "util": "^0.10.3"
+  }
+}
