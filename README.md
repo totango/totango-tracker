@@ -1,5 +1,7 @@
 # totango-tracker
-Node JS Totango activities, modules and attributes tracker
+[Totango](http://www.totango.com) is a SaaS analytics solution for tracking your users, improve conversion
+and rention.
+This is a Node.js tracker module for activities, modules and attributes - wrapping Totango's [REST API](https://totango.zendesk.com/hc/en-us/articles/203639605-Server-Backend-Integration-HTTP-)
 
 ##Installation
 ```
@@ -23,13 +25,13 @@ tracker.init('SP-1234-01', '123', 'john@anonymous.com', { accountName: 'Anonymou
 ```js
 tracker.track('some activity', 'some module', function(err){
   if (err) { console.log(err.message()); }
-  // Success              
+  // Success
 });
 ```
 
 ###Set Account Attribute(s)
 ```js
-tracker.setAccountAttributes({ 
+tracker.setAccountAttributes({
   'Attribute1' : 'value1',
   'Attribute2' : 'value2',
   }, function(err){
@@ -40,7 +42,7 @@ tracker.setAccountAttributes({
 
 ###Set User Attribute(s)
 ```js
-tracker.setUserAttributes({ 
+tracker.setUserAttributes({
   'Attribute1' : 'value1',
   'Attribute2' : 'value2',
   }, function(err){
@@ -50,4 +52,4 @@ tracker.setUserAttributes({
 ```
 
 ##Credits
-This npm module is implemented by Sahar Rehani and provided by Totango
+This npm module is implemented by [saharrehani](https://github.com/saharrehani) and provided by [Totango](http://www.totango.com)
