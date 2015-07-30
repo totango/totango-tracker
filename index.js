@@ -62,6 +62,11 @@ module.exports = function() {
     };
 
     var sendSDR = function(params, callback) {
+
+        if (Object.getOwnPropertyNames(params).length < 3) {
+            throw new Error('You have forgot to initialise service/account/user id(s)');
+        }
+
         var opt = {
             url: url.format({
                 protocol: 'https',
