@@ -13,12 +13,13 @@ $ npm install totango-tracker
 ```js
 var tracker = require('totango-tracker')();
 
+// serviceId -> your unique Totango service id
 tracker.init(serviceId, accountId, userId, { accountName: accountName, userName: userName});
 
 // Examples
-tracker.init('SP-1234-01', '123', 'john@anonymous.com');
-// init properties with pretty display names
-tracker.init('SP-1234-01', '123', 'john@anonymous.com', { accountName: 'Anonymous Industries', userName: 'John Doe'});
+tracker.init('SP-1234-01', '4567', 'john@anonymous.com');
+// OPTIONAL: init properties with pretty display names
+tracker.init('SP-1234-01', '4567', 'john@anonymous.com', { accountName: 'Anonymous Industries', userName: 'John Doe'});
 ```
 
 ###Track Activity
