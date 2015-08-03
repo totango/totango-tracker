@@ -11,7 +11,7 @@ $ npm install totango-tracker
 ##Usage
 ###Create Instance
 ```js
-var tracker = require('totango-tracker')(serviceId);
+var tracker = require('totango-tracker')(**serviceId**);
 
 // Example: serviceId -> your unique Totango service id
 var tracker = require('totango-tracker')('SP-XXXX-01');
@@ -19,24 +19,28 @@ var tracker = require('totango-tracker')('SP-XXXX-01');
 
 ###Track Activity
 ```js
-tracker.track(accountId, userId, activity, module, function(err){
-  if (err) { console.log(err.message()); }
-  // Success
+tracker.**trackActivity**(**accountId**, **userId**, **activity**, **module**, function(err){
+    if (err) { console.log(err.message()); }
+    else {
+    // Success
+    }
 });
 
 // Example
-tracker.track('XXXXX', 'john@anonymous.com', 'some activity', 'some module', function(err){
-  if (err) { console.log(err.message()); }
-  // Success
+tracker.trackActivity('YYYYY', 'john@anonymous.com', 'some activity', 'some module', function(err){
+    if (err) { console.log(err.message()); }
+    else {
+    // Success
+    }
 });
 ```
 
 ###Set Account Attribute(s)
 ```js
-tracker.setAccountAttributes(accountId, {
+tracker.**setAccountAttributes**(**accountId**, {
     'Attribute1'    : 'value1',
     'Attribute2'    : 'value2',
-    'name'          : 'Anonymous Industries'  // preserved attribute
+    'name'          : 'Anonymous Industries'  // The display name for the account
     }, function(err) {
         if (err) { console.log(err.message()); }
         // Success
@@ -46,10 +50,10 @@ tracker.setAccountAttributes(accountId, {
 
 ###Set User Attribute(s)
 ```js
-tracker.setUserAttributes(accountId, userId, {
+tracker.**setUserAttributes**(**accountId**, **userId**, {
     'Attribute1'    : 'value1',
     'Attribute2'    : 'value2',
-    'name'          : 'John Doe'    // preserved attribute
+    'name'          : 'John Doe'    // The display name for the user
     }, function(err) {
         if (err) { console.log(err.message()); }
         // Success
