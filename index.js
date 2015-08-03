@@ -8,7 +8,7 @@ module.exports = function(serviceId) {
 
     var service_id;
 
-    if (serviceId === undefined || typeof accountId !== 'string') { throw new Error('Please provide a service id (String)'); }
+    if (serviceId === undefined || typeof serviceId !== 'string') { throw new Error('Please provide a service id (String)'); }
 
     service_id = serviceId;
 
@@ -73,7 +73,7 @@ module.exports = function(serviceId) {
 
             var params = {
                 sdr_s: service_id,
-                sdr_o: accountId
+                sdr_o: identity.accountId
             };
             if (identity.userId) { params.sdr_u = userId; }
             params = extend(params, initialParams);
