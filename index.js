@@ -67,7 +67,7 @@ module.exports = function(serviceId) {
         callback = callback || function(){};
 
         if (typeof attributes !== 'object' || typeof callback !== 'function') {
-           console.log('totango-tracker.setAttributes: Invalid attributes');
+           console.log('totango-tracker: Invalid attributes');
         }
         else {
 
