@@ -22,7 +22,7 @@ var tracker = require('totango-tracker')('SP-XXXX-01');
 tracker.trackActivity(accountId, userId, activity, module, function(err){
     if (err) { console.log(err.message()); }
     else {
-    // Success
+        // Success
     }
 });
 
