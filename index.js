@@ -4,70 +4,91 @@ var querystring = require('querystring');
 var extend = require('util')._extend;
 
 
-module.exports = function() {
+module.exports = function(serviceId) {
 
-    var self = this;
-    var properties = properties || {};
+    var service_id;
 
-    var init = function(serviceId, accountId, userId, displayNames) {
-        var params = {
-            sdr_s: serviceId,
-            sdr_u: userId,
-            sdr_o: accountId
-        };
-        if (displayNames) {
-            params.sdr_odn = displayNames.accountName || '';
-            params.sdr_u.name = displayNames.userName || '';
-        }
-        properties = params;
-    };
+    if (serviceId === undefined || typeof serviceId !== 'string') { throw new Error('Please provide a service id (String)'); }
 
-    var track = function(activity, module, callback) {
-        if (typeof activity !== 'string' ||
+    service_id = serviceId;
+
+    var trackActivity = function(accountId, userId, activity, module, callback) {
+        callback = callback || function(){};
+
+        if (typeof accountId !== 'string' ||
+            typeof userId !== 'string' ||
+            typeof activity !== 'string' ||
             typeof module !== 'string' ||
             typeof callback !== 'function') {
-            throw new Error('Invalid parameters');
+            console.log('totango-tracker.trackActivity: Invalid parameters');
         }
+        else {
+            var params = {
+                sdr_s: service_id,
+                sdr_o: accountId,
+                sdr_u: userId,
+                sdr_a: activity,
+                sdr_m: module
+            };
 
-        var params = extend({}, properties);
-        params.sdr_a = activity;
-        params.sdr_m = module;
-        sendSDR(params, callback);
+            sendSDR(params, callback);
+        }
     };
 
-    var setUserAttributes = function(attributes, callback) {
-        if (typeof attributes !== 'object' ||
-            typeof callback !== 'function') {
-            throw new Error('Invalid parameters');
+    var setUserAttributes = function(accountId, userId, attributes, callback) {
+        if (typeof accountId !== 'string' || typeof userId !== 'string') {
+            console.log('totango-tracker.setUserAttributes: Invalid parameters');
         }
-        var params = extend({}, properties);
-
-        for(var attr in attributes) {
-            params['sdr_u.' + attr] = attributes[attr];
+        else {
+            var initialParams = {};
+            if (attributes['name']) {
+                initialParams['sdr_u.name'] = attributes['name'];
+                delete attributes.name;
+            }
+            setAttributes('sdr_u.', initialParams, { accountId: accountId, userId: userId }, attributes, callback);
         }
-        sendSDR(params, callback);
     };
 
-    var setAccountAttributes = function(attributes, callback) {
-        if (typeof attributes !== 'object' ||
-            typeof callback !== 'function') {
-            throw new Error('Invalid parameters');
+    var setAccountAttributes = function(accountId, attributes, callback) {
+        if (typeof accountId !== 'string') {
+            console.log('totango-tracker.setAccountAttributes: Invalid parameters');
         }
-        var params = extend({}, properties);
+        else {
+            var initialParams = {};
+            if (attributes['name']) {
+                initialParams['sdr_odn'] = attributes['name'];
+                delete attributes.name;
+            }
+            setAttributes('sdr_o.', initialParams, { accountId: accountId }, attributes, callback);
+        }
+    };
 
-        for(var attr in attributes) {
-            params['sdr_o.' + attr] = attributes[attr];
+    var setAttributes = function(prefix, initialParams, identity, attributes, callback) {
+        callback = callback || function(){};
+
+        if (typeof attributes !== 'object' || typeof callback !== 'function') {
+           console.log('totango-tracker: Invalid attributes');
         }
-        sendSDR(params, callback);
+        else {
+
+            var params = {
+                sdr_s: service_id,
+                sdr_o: identity.accountId
+            };
+            if (identity.userId) { params['sdr_u'] = identity.userId; }
+            params = extend(params, initialParams);
+
+            for (var attr in attributes) {
+                params[prefix + attr] = attributes[attr];
+            }
+
+            sendSDR(params, callback);
+        }
     };
 
     var sendSDR = function(params, callback) {
 
-        if (Object.getOwnPropertyNames(params).length < 3) {
-            throw new Error('You have forgot to initialise service/account/user id(s)');
-        }
-
-        var opt = {
+        var options = {
             url: url.format({
                 protocol: 'https',
                 host: 'sdr.totango.com',
@@ -78,7 +99,7 @@ module.exports = function() {
             jar: false
         };
 
-        request(opt, function(err, res, body) {
+        request(options, function(err, res, body) {
             if (err) {
                 callback(err);
             }
@@ -93,8 +114,7 @@ module.exports = function() {
 
 
     return {
-        init: init,
-        track : track,
+        trackActivity : trackActivity,
         setUserAttributes : setUserAttributes,
         setAccountAttributes : setAccountAttributes
     };
