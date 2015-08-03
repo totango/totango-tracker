@@ -1,6 +1,7 @@
 var url = require('url');
 var request = require('request');
 var querystring = require('querystring');
+var extend = require('util')._extend;
 
 
 module.exports = function(serviceId) {
@@ -38,17 +39,31 @@ module.exports = function(serviceId) {
         if (typeof accountId !== 'string' || typeof userId !== 'string') {
             console.log('totango-tracker.setUserAttributes: Invalid parameters');
         }
-        else { setAttributes('sdr_u.', { accountId: accountId, userId: userId }, attributes, callback); }
+        else {
+            var initialParams = {};
+            if (attributes['name']) {
+                initialParams['sdr_u.name'] = attributes['name'];
+                delete attributes.name;
+            }
+            setAttributes('sdr_u.', initialParams, { accountId: accountId, userId: userId }, attributes, callback);
+        }
     };
 
     var setAccountAttributes = function(accountId, attributes, callback) {
         if (typeof accountId !== 'string') {
             console.log('totango-tracker.setAccountAttributes: Invalid parameters');
         }
-        setAttributes('sdr_o.', { accountId: accountId }, attributes, callback);
+        else {
+            var initialParams = {};
+            if (attributes['name']) {
+                initialParams['sdr_odn'] = attributes['name'];
+                delete attributes.name;
+            }
+            setAttributes('sdr_o.', initialParams, { accountId: accountId }, attributes, callback);
+        }
     };
 
-    var setAttributes = function(prefix, identity, attributes, callback) {
+    var setAttributes = function(prefix, initialParams, identity, attributes, callback) {
         callback = callback || function(){};
 
         if (typeof attributes !== 'object' || typeof callback !== 'function') {
@@ -61,11 +76,10 @@ module.exports = function(serviceId) {
                 sdr_o: accountId
             };
             if (identity.userId) { params.sdr_u = userId; }
+            params = extend(params, initialParams);
 
             for (var attr in attributes) {
-                if (attr === 'user_name') { params['sdr_u.name'] = attributes[attr]; }
-                else if (attr === 'account_name') { params['sdr_odn'] = attributes[attr]; }
-                else { params[prefix + attr] = attributes[attr]; }
+                params[prefix + attr] = attributes[attr];
             }
 
             sendSDR(params, callback);

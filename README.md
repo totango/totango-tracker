@@ -36,7 +36,7 @@ tracker.track('XXXXX', 'john@anonymous.com', 'some activity', 'some module', fun
 tracker.setAccountAttributes(accountId, {
     'Attribute1'    : 'value1',
     'Attribute2'    : 'value2',
-    'account_name'  : 'Anonymous Industries'  // preserved attribute
+    'name'          : 'Anonymous Industries'  // preserved attribute
     }, function(err) {
         if (err) { console.log(err.message()); }
         // Success
@@ -49,8 +49,7 @@ tracker.setAccountAttributes(accountId, {
 tracker.setUserAttributes(accountId, userId, {
     'Attribute1'    : 'value1',
     'Attribute2'    : 'value2',
-    'account_name'  : 'Anonymous Industries',  // preserved attribute
-    'user_name'     : 'John Doe'               // preserved attribute
+    'name'          : 'John Doe'    // preserved attribute
     }, function(err) {
         if (err) { console.log(err.message()); }
         // Success
