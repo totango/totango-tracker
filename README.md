@@ -55,7 +55,7 @@ tracker.setAccountAttributes(accountId, {
 tracker.setUserAttributes(accountId, userId, {
     'Attribute1'    : 'value1',
     'Attribute2'    : 'value2',
-    'name'          : 'John Doe'    // The display name for the account
+    'name'          : 'John Doe'    // The display name for the user
     }, function(err) {
         if (err) { console.log(err.message()); }
         else {
