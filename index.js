@@ -75,7 +75,7 @@ module.exports = function(serviceId) {
                 sdr_s: service_id,
                 sdr_o: identity.accountId
             };
-            if (identity.userId) { params.sdr_u = userId; }
+            if (identity.userId) { params['sdr_u'] = identity.userId; }
             params = extend(params, initialParams);
 
             for (var attr in attributes) {
