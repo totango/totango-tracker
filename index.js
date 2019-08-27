@@ -2,17 +2,23 @@ var url = require('url');
 var request = require('request');
 var querystring = require('querystring');
 var extend = require('util')._extend;
+var _ = require('lodash');
 
+var HOSTS = {
+    production: "sdr.totango.com",
+    eu: "sdr-eu.totango.com",
+};
 
-module.exports = function(serviceId) {
+module.exports = function(serviceId, env) {
 
     var service_id;
 
     if (serviceId === undefined || typeof serviceId !== 'string') { throw new Error('Please provide a service id (String)'); }
 
     service_id = serviceId;
+    env = _.includes(_.keys(HOSTS), env) ? env : 'production';
 
-    var trackActivity = function(accountId, userId, activity, module, callback) {
+    var trackActivityByServiceId = function(serviceId, accountId, userId, activity, module, callback) {
         callback = callback || function(){};
 
         if (typeof accountId !== 'string' ||
@@ -24,7 +30,7 @@ module.exports = function(serviceId) {
         }
         else {
             var params = {
-                sdr_s: service_id,
+                sdr_s: serviceId,
                 sdr_o: accountId,
                 sdr_u: userId,
                 sdr_a: activity,
@@ -33,6 +39,10 @@ module.exports = function(serviceId) {
 
             sendSDR(params, callback);
         }
+    };
+
+    var trackActivity = function(accountId, userId, activity, module, callback) {
+        trackActivityByServiceId(service_id, accountId, userId, activity, module, callback)
     };
 
     var setUserAttributes = function(accountId, userId, attributes, callback) {
@@ -91,7 +101,7 @@ module.exports = function(serviceId) {
         var options = {
             url: url.format({
                 protocol: 'https',
-                host: 'sdr.totango.com',
+                host: HOSTS[env],
                 pathname: 'pixel.gif/',
                 search: querystring.stringify(params)
             }),
@@ -115,6 +125,7 @@ module.exports = function(serviceId) {
 
     return {
         trackActivity : trackActivity,
+        trackActivityByServiceId: trackActivityByServiceId,
         setUserAttributes : setUserAttributes,
         setAccountAttributes : setAccountAttributes
     };
