@@ -2,7 +2,6 @@ var url = require('url');
 var request = require('request');
 var querystring = require('querystring');
 var extend = require('util')._extend;
-var _ = require('lodash');
 
 var HOSTS = {
     production: "sdr.totango.com",
@@ -16,7 +15,7 @@ module.exports = function(serviceId, env) {
     if (serviceId === undefined || typeof serviceId !== 'string') { throw new Error('Please provide a service id (String)'); }
 
     service_id = serviceId;
-    env = _.includes(_.keys(HOSTS), env) ? env : 'production';
+    env = env && Object.keys(HOSTS).indexOf(env) !== -1 ? env : 'production';
 
     var trackActivityByServiceId = function(serviceId, accountId, userId, activity, module, callback) {
         callback = callback || function(){};
