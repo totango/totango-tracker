@@ -11,11 +11,11 @@ var HOSTS = {
 module.exports = function(serviceId, env) {
 
     var service_id;
+    var host = HOSTS[env] || HOSTS['production'];
 
     if (serviceId === undefined || typeof serviceId !== 'string') { throw new Error('Please provide a service id (String)'); }
 
     service_id = serviceId;
-    env = env && Object.keys(HOSTS).indexOf(env) !== -1 ? env : 'production';
 
     var trackActivityByServiceId = function(serviceId, accountId, userId, activity, module, callback) {
         callback = callback || function(){};
@@ -100,7 +100,7 @@ module.exports = function(serviceId, env) {
         var options = {
             url: url.format({
                 protocol: 'https',
-                host: HOSTS[env],
+                host: host,
                 pathname: 'pixel.gif/',
                 search: querystring.stringify(params)
             }),
