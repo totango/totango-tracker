@@ -6,6 +6,7 @@ var extend = require('util')._extend;
 var HOSTS = {
     production: "sdr.totango.com",
     eu: "sdr-eu.totango.com",
+    test: "sdr-test.totango.com",
 };
 
 module.exports = function(serviceId, env) {
