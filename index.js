@@ -5,13 +5,14 @@ var extend = require('util')._extend;
 
 var HOSTS = {
     production: "sdr.totango.com",
-    eu: "sdr-eu.totango.com",
+    eu: "sdr-eu1.totango.com",
     test: "sdr-test.totango.com",
 };
 
 module.exports = function(serviceId, env) {
 
     var service_id;
+    // always sends to production unless env is defined in tracker config
     var host = HOSTS[env] || HOSTS['production'];
 
     if (serviceId === undefined || typeof serviceId !== 'string') { throw new Error('Please provide a service id (String)'); }
