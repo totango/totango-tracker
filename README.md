@@ -1,26 +1,35 @@
 # totango-tracker
-[Totango](http://www.totango.com) is a SaaS analytics solution for tracking your users, improve conversion
-and rention.
-This is a Node.js tracker module for activities, modules and attributes - wrapping Totango's [REST API](https://totango.zendesk.com/hc/en-us/articles/203639605-Server-Backend-Integration-HTTP-)
+The totango-tracker package is a simple Node.JS package, wrapping the [Totango HTTP API](https://totango.zendesk.com/hc/en-us/articles/203639605-Server-Backend-Integration-HTTP-) used to log user-activity events and/or attribute-updates on accounts.
 
-##Installation
+## Installation
 ```
 $ npm install totango-tracker
 ```
 
-##Usage
-###Create Instance
-```js
-var tracker = require('totango-tracker')(serviceId);
+## Usage
 
-// Example: serviceId -> your unique Totango service id
-var tracker = require('totango-tracker')('SP-XXXX-01');
+### Install the package
+```
+$ npm install totango-tracker
 ```
 
-###Track Activity
+### Create a tracker Instance
+```js
+//replace XXXX with your unique Totango service id
+const tracker = require('totango-tracker')('SP-XXXX-01');
+```
+
+If your data is stored in our EU data center, you will need to specify that in the initialization:
+```js
+//replace XXXX with your unique Totango service id
+const tracker = require('totango-tracker')('SP-XXXX-01', 'eu');
+```
+### Track Activity
 ```js
 tracker.trackActivity(accountId, userId, activity, module, function(err){
-    if (err) { console.log(err.message()); }
+    if (err) {
+        // handle the error
+    }
     else {
         // Success
     }
@@ -28,21 +37,19 @@ tracker.trackActivity(accountId, userId, activity, module, function(err){
 
 // Example
 tracker.trackActivity('YYYYY', 'john@anonymous.com', 'some activity', 'some module', function(err){
-    if (err) { console.log(err.message()); }
-    else {
-        // Success
-    }
+    ...
 });
 ```
 
-###Set Account Attribute(s)
+### Set Account Attribute(s)
 ```js
 tracker.setAccountAttributes(accountId, {
     'Attribute1'    : 'value1',
     'Attribute2'    : 'value2',
-    'name'          : 'Anonymous Industries'  // The display name for the account
     }, function(err) {
-        if (err) { console.log(err.message()); }
+         if (err) {
+            // handle the error
+        }
         else {
             // Success
         }
@@ -50,14 +57,15 @@ tracker.setAccountAttributes(accountId, {
 );
 ```
 
-###Set User Attribute(s)
+### Set User Attribute(s)
 ```js
 tracker.setUserAttributes(accountId, userId, {
     'Attribute1'    : 'value1',
     'Attribute2'    : 'value2',
-    'name'          : 'John Doe'    // The display name for the user
     }, function(err) {
-        if (err) { console.log(err.message()); }
+         if (err) {
+            // handle the error
+        }
         else {
             // Success
         }
@@ -65,5 +73,6 @@ tracker.setUserAttributes(accountId, userId, {
 );
 ```
 
-##Credits
-This npm module is implemented by [saharrehani](https://github.com/saharrehani) and provided by [Totango](http://www.totango.com)
+## License
+
+https://www.totango.com/terms-of-use
