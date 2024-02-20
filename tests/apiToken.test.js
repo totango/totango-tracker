@@ -1,8 +1,6 @@
 const request = require('request');
-require('./validations');
 
 jest.mock('request');
-
 
 describe('trackActivity', () => {
 	afterEach(() => {
