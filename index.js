@@ -141,8 +141,7 @@ module.exports = function (serviceId, env, apiToken) {
             jar: false
         };
 
-        request(options, function(err, res, body) {
-            console.log(err);
+        request(options, function (err, res, body) {
             if (err) {
                 callback(err);
             }
