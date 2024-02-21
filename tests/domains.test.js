@@ -9,7 +9,7 @@ describe('tracker domain', () => {
 
 	it('should send to US site', () => {
 		// Test case setup
-		const tracker = require('../index')('serviceId', 'production');
+		const tracker = require('../index')('serviceId', 'us');
 		const callback = jest.fn();
 		// Call the function
 		tracker.trackActivity('accountId', 'userId', 'activity', 'module', callback);
