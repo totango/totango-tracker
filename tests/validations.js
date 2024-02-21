@@ -1,12 +1,12 @@
 expect.extend({
-	toBeActivityUrl(received) {
+	toBeActivityUrl(received, serviceId) {
 		const url = new URL(received);
 		const searchParams = url.searchParams;
 		return {
 			message: () => `expected ${received} to be a valid URL`,
 			pass: url.protocol === 'https:' &&
 				url.hostname !== '' &&
-				searchParams.get('sdr_s') === 'serviceId' &&
+				searchParams.get('sdr_s') === serviceId &&
 				searchParams.get('sdr_o') === 'accountId' &&
 				searchParams.get('sdr_u') === 'userId' &&
 				searchParams.get('sdr_a') === 'activity' &&

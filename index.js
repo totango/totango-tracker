@@ -20,7 +20,7 @@ module.exports = function (serviceId, env, apiToken) {
     service_id = serviceId;
     api_token = apiToken;
 
-    var trackActivityByServiceId = function (accountId, userId, activity, module, callback) {
+    var trackActivityByServiceId = function (serviceId, accountId, userId, activity, module, callback) {
         callback = callback || function(){};
 
         if (typeof accountId !== 'string' ||
@@ -32,7 +32,7 @@ module.exports = function (serviceId, env, apiToken) {
         }
         else {
             var params = {
-                sdr_s: service_id,
+                sdr_s: serviceId,
                 sdr_o: accountId,
                 sdr_u: userId,
                 sdr_a: activity,
@@ -54,7 +54,7 @@ module.exports = function (serviceId, env, apiToken) {
      * @example trackActivity('account_id', 'user_id', 'User logged-in', 'Login', function(err) {});
      */
     var trackActivity = function(accountId, userId, activity, module, callback) {
-        trackActivityByServiceId(accountId, userId, activity, module, callback)
+        trackActivityByServiceId(service_id, accountId, userId, activity, module, callback)
     };
 
     /**

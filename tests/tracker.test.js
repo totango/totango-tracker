@@ -20,7 +20,23 @@ describe('totango tracker', () => {
 			expect(request).toHaveBeenCalledTimes(1);
 			expect(request).toHaveBeenCalledWith(
 				expect.objectContaining({
-					url: expect.toBeActivityUrl(),
+					url: expect.toBeActivityUrl('serviceId'),
+				}), expect.any(Function)
+			);
+		});
+	});
+
+	describe('trackActivityByServiceId', () => {
+		it('should track activity with a specific service id successfully', () => {
+			// Test case setup
+			const callback = jest.fn();
+			// Call the function
+			tracker.trackActivityByServiceId('differentServiceId', 'accountId', 'userId', 'activity', 'module', callback);
+			// Assertion
+			expect(request).toHaveBeenCalledTimes(1);
+			expect(request).toHaveBeenCalledWith(
+				expect.objectContaining({
+					url: expect.toBeActivityUrl('differentServiceId'),
 				}), expect.any(Function)
 			);
 		});
