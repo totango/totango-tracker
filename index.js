@@ -9,16 +9,18 @@ var HOSTS = {
     test: "sdr-test.totango.com",
 };
 
-module.exports = function(serviceId, env) {
+module.exports = function (serviceId, env, apiToken) {
 
     var service_id;
+    var api_token;
     var host = HOSTS[env] || HOSTS['production'];
 
     if (serviceId === undefined || typeof serviceId !== 'string') { throw new Error('Please provide a service id (String)'); }
 
     service_id = serviceId;
+    api_token = apiToken;
 
-    var trackActivityByServiceId = function(serviceId, accountId, userId, activity, module, callback) {
+    var trackActivityByServiceId = function (serviceId, accountId, userId, activity, module, callback) {
         callback = callback || function(){};
 
         if (typeof accountId !== 'string' ||
@@ -34,17 +36,36 @@ module.exports = function(serviceId, env) {
                 sdr_o: accountId,
                 sdr_u: userId,
                 sdr_a: activity,
-                sdr_m: module
+                sdr_m: module,
             };
 
             sendSDR(params, callback);
         }
     };
 
+    /**
+     * Track user activity
+     * @param {string} accountId
+     * @param {string} userId
+     * @param {string} activity
+     * @param {string} module
+     * @param {function} callback
+     * @returns {void}
+     * @example trackActivity('account_id', 'user_id', 'User logged-in', 'Login', function(err) {});
+     */
     var trackActivity = function(accountId, userId, activity, module, callback) {
         trackActivityByServiceId(service_id, accountId, userId, activity, module, callback)
     };
 
+    /**
+     * Set user attributes
+     * @param {string} accountId
+     * @param {string}userId
+     * @param {object} attributes - key value pairs of user attributes
+     * @param {function} callback
+     * @returns {void}
+     * @example setUserAttributes('account_id', 'user_id', { 'Number of Open Support Tickets': 3 }, function(err) {});
+     */
     var setUserAttributes = function(accountId, userId, attributes, callback) {
         if (typeof accountId !== 'string' || typeof userId !== 'string') {
             console.log('totango-tracker.setUserAttributes: Invalid parameters');
@@ -59,6 +80,14 @@ module.exports = function(serviceId, env) {
         }
     };
 
+    /**
+     * Set account attributes
+     * @param {string} accountId
+     * @param {object} attributes - key value pairs of user attributes
+     * @param {function} callback
+     * @returns {void}
+     * @example setUserAttributes('account_id', { 'Number of Open Support Tickets': 3 }, function(err) {});
+     */
     var setAccountAttributes = function(accountId, attributes, callback) {
         if (typeof accountId !== 'string') {
             console.log('totango-tracker.setAccountAttributes: Invalid parameters');
@@ -83,7 +112,7 @@ module.exports = function(serviceId, env) {
 
             var params = {
                 sdr_s: service_id,
-                sdr_o: identity.accountId
+                sdr_o: identity.accountId,
             };
             if (identity.userId) { params['sdr_u'] = identity.userId; }
             params = extend(params, initialParams);
@@ -97,6 +126,9 @@ module.exports = function(serviceId, env) {
     };
 
     var sendSDR = function(params, callback) {
+        if (api_token) {
+            params['api-token'] = api_token;
+        }
 
         var options = {
             url: url.format({
@@ -109,7 +141,7 @@ module.exports = function(serviceId, env) {
             jar: false
         };
 
-        request(options, function(err, res, body) {
+        request(options, function (err, res, body) {
             if (err) {
                 callback(err);
             }
