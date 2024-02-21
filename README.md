@@ -15,14 +15,8 @@ $ npm install totango-tracker
 
 ### Create a tracker Instance
 ```js
-//replace XXXX with your unique Totango service id
-const tracker = require('totango-tracker')('SP-XXXX-01');
-```
-
-If your data is stored in our EU data center, you will need to specify that in the initialization:
-```js
-//replace XXXX with your unique Totango service id
-const tracker = require('totango-tracker')('SP-XXXX-01', 'eu');
+//replace XXXX with your unique Totango service id, set the relevant site and add your SDR security token
+const tracker = require('totango-tracker')('SP-XXXX-01','{us}/{eu}', 'sdr-token');
 ```
 ### Track Activity
 ```js

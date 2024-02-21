@@ -4,7 +4,7 @@ var querystring = require('querystring');
 var extend = require('util')._extend;
 
 var HOSTS = {
-    production: "sdr.totango.com",
+    us: "sdr.totango.com",
     eu: "sdr-eu1.totango.com",
     test: "sdr-test.totango.com",
 };
@@ -13,7 +13,7 @@ module.exports = function (serviceId, env, apiToken) {
 
     var service_id;
     var api_token;
-    var host = HOSTS[env] || HOSTS['production'];
+    var host = HOSTS[env] || HOSTS['us'];
 
     if (serviceId === undefined || typeof serviceId !== 'string') { throw new Error('Please provide a service id (String)'); }
 
