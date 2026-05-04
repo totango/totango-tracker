@@ -1,5 +1,5 @@
 var url = require('url');
-var request = require('request');
+var axios = require('axios');
 var querystring = require('querystring');
 var extend = require('util')._extend;
 
@@ -130,28 +130,30 @@ module.exports = function (serviceId, env, apiToken) {
             params['api-token'] = api_token;
         }
 
-        var options = {
-            url: url.format({
-                protocol: 'https',
-                host: host,
-                pathname: 'pixel.gif/',
-                search: querystring.stringify(params)
-            }),
-            method: 'GET',
-            jar: false
-        };
-
-        request(options, function (err, res, body) {
-            if (err) {
-                callback(err);
-            }
-            else if (res.statusCode !== 200 && res.statusCode !== 201) {
-                callback(new Error('Invalid request, status code: ' + res.statusCode));
-            }
-            else {
-                callback(null);
-            }
+        var pixelUrl = url.format({
+            protocol: 'https',
+            host: host,
+            pathname: 'pixel.gif/',
+            search: querystring.stringify(params)
         });
+
+        axios({
+            url: pixelUrl,
+            method: 'GET',
+            validateStatus: function (status) {
+                return status === 200 || status === 201;
+            }
+        })
+            .then(function () {
+                callback(null);
+            })
+            .catch(function (err) {
+                if (err.response) {
+                    callback(new Error('Invalid request, status code: ' + err.response.status));
+                } else {
+                    callback(err);
+                }
+            });
     };
 
 

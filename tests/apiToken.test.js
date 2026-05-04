@@ -1,8 +1,12 @@
-const request = require('request');
+const axios = require('axios');
 
-jest.mock('request');
+jest.mock('axios');
 
 describe('trackActivity', () => {
+	beforeEach(() => {
+		axios.mockResolvedValue({ status: 200, data: '' });
+	});
+
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
@@ -14,11 +18,11 @@ describe('trackActivity', () => {
 		// Call the function
 		tracker.trackActivity('accountId', 'userId', 'activity', 'module', callback);
 		// Assertion
-		expect(request).toHaveBeenCalledTimes(1);
-		expect(request).toHaveBeenCalledWith(
+		expect(axios).toHaveBeenCalledTimes(1);
+		expect(axios).toHaveBeenCalledWith(
 			expect.objectContaining({
 				url: expect.stringContaining('apiToken'),
-			}), expect.any(Function)
+			})
 		);
 	});
 
@@ -29,11 +33,11 @@ describe('trackActivity', () => {
 		// Call the function
 		tracker.trackActivity('accountId', 'userId', 'activity', 'module', callback);
 		// Assertion
-		expect(request).toHaveBeenCalledTimes(1);
-		expect(request).toHaveBeenCalledWith(
+		expect(axios).toHaveBeenCalledTimes(1);
+		expect(axios).toHaveBeenCalledWith(
 			expect.objectContaining({
 				url: expect.not.stringContaining('apiToken'),
-			}), expect.any(Function)
+			})
 		);
 	});
 });

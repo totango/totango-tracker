@@ -1,8 +1,12 @@
-const request = require('request');
+const axios = require('axios');
 
-jest.mock('request');
+jest.mock('axios');
 
 describe('tracker domain', () => {
+	beforeEach(() => {
+		axios.mockResolvedValue({ status: 200, data: '' });
+	});
+
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
@@ -14,11 +18,11 @@ describe('tracker domain', () => {
 		// Call the function
 		tracker.trackActivity('accountId', 'userId', 'activity', 'module', callback);
 		// Assertion
-		expect(request).toHaveBeenCalledTimes(1);
-		expect(request).toHaveBeenCalledWith(
+		expect(axios).toHaveBeenCalledTimes(1);
+		expect(axios).toHaveBeenCalledWith(
 			expect.objectContaining({
 				url: expect.stringContaining('sdr.totango.com'),
-			}), expect.any(Function)
+			})
 		);
 	});
 
@@ -29,11 +33,11 @@ describe('tracker domain', () => {
 		// Call the function
 		tracker.trackActivity('accountId', 'userId', 'activity', 'module', callback);
 		// Assertion
-		expect(request).toHaveBeenCalledTimes(1);
-		expect(request).toHaveBeenCalledWith(
+		expect(axios).toHaveBeenCalledTimes(1);
+		expect(axios).toHaveBeenCalledWith(
 			expect.objectContaining({
 				url: expect.stringContaining('sdr-eu1.totango.com'),
-			}), expect.any(Function)
+			})
 		);
 	});
 
@@ -44,11 +48,11 @@ describe('tracker domain', () => {
 		// Call the function
 		tracker.trackActivity('accountId', 'userId', 'activity', 'module', callback);
 		// Assertion
-		expect(request).toHaveBeenCalledTimes(1);
-		expect(request).toHaveBeenCalledWith(
+		expect(axios).toHaveBeenCalledTimes(1);
+		expect(axios).toHaveBeenCalledWith(
 			expect.objectContaining({
 				url: expect.stringContaining('sdr-test.totango.com'),
-			}), expect.any(Function)
+			})
 		);
 	});
 });

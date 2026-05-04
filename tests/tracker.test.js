@@ -1,10 +1,14 @@
+const axios = require('axios');
 const tracker = require('../index')('serviceId', 'eu', 'apiToken');
-const request = require('request');
 require('./validations');
 
-jest.mock('request');
+jest.mock('axios');
 
 describe('totango tracker', () => {
+
+	beforeEach(() => {
+		axios.mockResolvedValue({ status: 200, data: '' });
+	});
 
 	afterEach(() => {
 		jest.clearAllMocks();
@@ -17,11 +21,11 @@ describe('totango tracker', () => {
 			// Call the function
 			tracker.trackActivity('accountId', 'userId', 'activity', 'module', callback);
 			// Assertion
-			expect(request).toHaveBeenCalledTimes(1);
-			expect(request).toHaveBeenCalledWith(
+			expect(axios).toHaveBeenCalledTimes(1);
+			expect(axios).toHaveBeenCalledWith(
 				expect.objectContaining({
 					url: expect.toBeActivityUrl('serviceId'),
-				}), expect.any(Function)
+				})
 			);
 		});
 	});
@@ -33,11 +37,11 @@ describe('totango tracker', () => {
 			// Call the function
 			tracker.trackActivityByServiceId('differentServiceId', 'accountId', 'userId', 'activity', 'module', callback);
 			// Assertion
-			expect(request).toHaveBeenCalledTimes(1);
-			expect(request).toHaveBeenCalledWith(
+			expect(axios).toHaveBeenCalledTimes(1);
+			expect(axios).toHaveBeenCalledWith(
 				expect.objectContaining({
 					url: expect.toBeActivityUrl('differentServiceId'),
-				}), expect.any(Function)
+				})
 			);
 		});
 	});
@@ -52,11 +56,11 @@ describe('totango tracker', () => {
 			// Call the function
 			tracker.setUserAttributes('accountId', 'userId', attributes, callback);
 			// Assertion
-			expect(request).toHaveBeenCalledTimes(1);
-			expect(request).toHaveBeenCalledWith(
+			expect(axios).toHaveBeenCalledTimes(1);
+			expect(axios).toHaveBeenCalledWith(
 				expect.objectContaining({
 					url: expect.toBeUserAttributesUrl(),
-				}), expect.any(Function)
+				})
 			);
 		});
 	});
@@ -71,11 +75,11 @@ describe('totango tracker', () => {
 			// Call the function
 			tracker.setAccountAttributes('accountId', attributes, callback);
 			// Assertion
-			expect(request).toHaveBeenCalledTimes(1);
-			expect(request).toHaveBeenCalledWith(
+			expect(axios).toHaveBeenCalledTimes(1);
+			expect(axios).toHaveBeenCalledWith(
 				expect.objectContaining({
 					url: expect.toBeAccountAttributesUrl(),
-				}), expect.any(Function)
+				})
 			);
 		});
 	});
